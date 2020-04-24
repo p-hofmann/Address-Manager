@@ -28,15 +28,6 @@ namespace UnitTestCore
     }
 
     [TestMethod]
-    public void TestMethodSqliteDbConnect()
-    {
-      SqlManager db = new SqlManager(debug: true);
-      db.DbInitialize();
-      db.DbConnect();
-      Assert.IsTrue(false);
-    }
-
-    [TestMethod]
     public void TestMethodEntryAdd()
     {
       SqlManager db = new SqlManager(debug: true);

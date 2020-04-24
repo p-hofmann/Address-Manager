@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Data.SQLite;
 
 namespace CoreLib
 {
@@ -8,6 +9,8 @@ namespace CoreLib
   /// </summary>
   public class SqlManager
   {
+    const string _sqlCreateFileLocation = "./CoreLib/sql/dbCreate.sql";
+
     /// <summary>
     /// Debug mode.
     /// 
@@ -18,7 +21,12 @@ namespace CoreLib
     /// <summary>
     /// Default location of database.
     /// </summary>
-    private string _defaultDbLocation;
+    private string _dbLocation;
+
+    /// <summary>
+    /// Default location of database.
+    /// </summary>
+    private string _dbSource;
 
     /// <summary>
     /// Constructor
@@ -28,10 +36,8 @@ namespace CoreLib
     public SqlManager(string defaultDbLocation = "./sqlDatabase", Boolean debug = false)
     {
       _debug = debug;
-      _defaultDbLocation = defaultDbLocation;
-
-      if (debug)
-        _defaultDbLocation = Path.GetTempFileName();
+      _dbLocation = defaultDbLocation;
+      _dbSource = @"URI=file:" + _dbLocation;
     }
 
     /// <summary>
@@ -39,7 +45,25 @@ namespace CoreLib
     /// </summary>
     public void DbInitialize()
     {
-      // TODO
+      if (_debug)
+        _dbLocation = Path.GetTempFileName();
+
+      var con = new SQLiteConnection(_dbSource);
+      con.Open();
+
+      string stm;
+      if (_debug)
+      {
+        stm = "SELECT SQLITE_VERSION()";
+        var command = new SQLiteCommand(stm, con);
+        string version = command.ExecuteScalar().ToString();
+        Console.WriteLine($"SQLite version: {version}");      // TODO
+      }
+
+      stm = File.ReadAllText(_sqlCreateFileLocation);
+      var cmd = new SQLiteCommand(stm, con);
+      cmd.ExecuteNonQuery();
+      con.Close();
     }
 
     /// <summary>
@@ -54,14 +78,6 @@ namespace CoreLib
     /// Clear DB of all entries
     /// </summary>
     public void DbClear()
-    {
-      // TODO
-    }
-
-    /// <summary>
-    /// Clear DB of all entries
-    /// </summary>
-    public void DbConnect()
     {
       // TODO
     }
