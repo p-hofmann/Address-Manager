@@ -9,7 +9,7 @@ namespace CoreLib
   /// </summary>
   public class SqlManager
   {
-    const string _sqlCreateFileLocation = "./CoreLib/sql/dbCreate.sql";
+    const string _sqlCreateFileLocation = "./dbCreate.sql";
 
     /// <summary>
     /// Debug mode.
@@ -57,7 +57,7 @@ namespace CoreLib
         stm = "SELECT SQLITE_VERSION()";
         var command = new SQLiteCommand(stm, con);
         string version = command.ExecuteScalar().ToString();
-        Console.WriteLine($"SQLite version: {version}");      // TODO
+        Console.WriteLine($"SQLite version: {version}");
       }
 
       stm = File.ReadAllText(_sqlCreateFileLocation);
@@ -71,7 +71,8 @@ namespace CoreLib
     /// </summary>
     public void DbDelete()
     {
-      // TODO
+      if (Path.Exists(_dbLocation))
+	Path.Delete(_dbLocation);
     }
 
     /// <summary>
@@ -79,7 +80,7 @@ namespace CoreLib
     /// </summary>
     public void DbClear()
     {
-      // TODO
+      // TODO: DELETE FROM person;
     }
 
     /// <summary>
@@ -87,17 +88,72 @@ namespace CoreLib
     /// </summary>
     public void EntryGetAll()
     {
-      // TODO
+      // TODO:
+*/
+SELECT 
+person.name_first, person.name_last, city.city_name, street.name, address.house_number 
+FROM person 
+JOIN address ON person.id_adress = address.id 
+JOIN city ON address.id_city = city.id 
+JOIN street ON address.id_street = city.id 
+ORDER BY person.name_last;
+/*
     }
 
-    public void EntryAdd()
+    public void EntryGetPhone(int id_person)
+    {
+      // TODO
+*/
+SELECT 
+phone_category.name, phone_number.pnumber
+FROM list_phone 
+JOIN phone_number ON list_phone.id_phone_number = phone_number.id 
+JOIN phone_category ON phone_number.id_phone_category = phone_category.id 
+WHERE list_phone.id_person = {0}
+ORDER BY phone_category.name;
+/*
+    }
+
+    public void EntryGetPhoneList(int id_person)
+    {
+      // TODO
+*/
+SELECT 
+phone_number.id, phone_category.name, phone_number.pnumber 
+FROM list_phone 
+JOIN phone_number ON list_phone.id_phone_number = phone_number.id 
+JOIN phone_category ON phone_number.id_phone_category = phone_category.id 
+WHERE list_phone.id_person = {0}
+ORDER BY phone_category.name;
+/*
+    }
+
+    public void EntryGetPictureList(int id_person)
+    {
+      // TODO
+*/
+SELECT 
+picture.id, picture.name 
+FROM list_picture 
+JOIN picture ON list_picture.id_picture = picture.id 
+WHERE list_picture.id_person = {0}
+ORDER BY picture.name;
+/*
+    }
+
+    public void EntryAddPicture(int id_person, string fileLocation)
     {
       // TODO
     }
 
-    public void EntryRemove()
+    public void EntryAddPhone(int id_person, string phoneNumber, string phoneCategory)
     {
       // TODO
+    }
+
+    public void EntryRemove(int id_person)
+    {
+      // TODO: DELETE FROM person WHERE id = {0};
     }
 
     public void EntryModify()
