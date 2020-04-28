@@ -11,7 +11,7 @@ CREATE TABLE city (
   id_country INTEGER,
     FOREIGN KEY (id_country) 
       REFERENCES country (id) 
-        ON DELETE CASCADE 
+        ON DELETE NO ACTION 
         ON UPDATE NO ACTION
 );
 
@@ -21,7 +21,7 @@ CREATE TABLE street (
   id_city INTEGER,
   FOREIGN KEY (id_city) 
     REFERENCES city (id) 
-      ON DELETE CASCADE 
+      ON DELETE NO ACTION 
       ON UPDATE NO ACTION
 );
 
@@ -36,7 +36,7 @@ CREATE TABLE address (
       ON UPDATE NO ACTION,
   FOREIGN KEY (id_city) 
     REFERENCES city (id) 
-      ON DELETE CASCADE 
+      ON DELETE NO ACTION 
       ON UPDATE NO ACTION
 );
 
@@ -58,7 +58,7 @@ CREATE TABLE phone_category (
 
 CREATE TABLE phone_number (
   id INTEGER PRIMARY KEY,
-  number TEXT,
+  pnumber TEXT,
   id_phone_category INTEGER,
   FOREIGN KEY (id_phone_category) 
     REFERENCES phone_category (id) 
