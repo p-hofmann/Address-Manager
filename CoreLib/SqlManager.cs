@@ -124,68 +124,13 @@ namespace CoreLib
       con.Close();
     }
 
-    /// <summary>
-    /// Get all entries in db
-    /// </summary>
-    public void EntryGetAll()
+    private long EntryAddCountry(SQLiteConnection con, int countryCode, string countryName)
     {
-      // TODO:
-      /*
-      SELECT 
-      person.name_first, person.name_last, city.city_name, street.name, address.house_number 
-      FROM person 
-      JOIN address ON person.id_adress = address.id 
-      JOIN city ON address.id_city = city.id 
-      JOIN street ON address.id_street = city.id 
-      ORDER BY person.name_last;
-      */
-    }
+      long idEntry = EntryGetCountryId(con, countryCode, countryName);
+      if (idEntry != 0)
+        return idEntry;
 
-    public void EntryGetPhone(int id_person)
-    {
-      // TODO
-      /*
-      SELECT
-phone_category.name, phone_number.pnumber
-FROM list_phone 
-JOIN phone_number ON list_phone.id_phone_number = phone_number.id 
-JOIN phone_category ON phone_number.id_phone_category = phone_category.id 
-WHERE list_phone.id_person = {0}
-ORDER BY phone_category.name;
-*/
-    }
-
-    public void EntryGetPhoneList(int id_person)
-    {
-      // TODO
-      /*
-      SELECT 
-      phone_number.id, phone_category.name, phone_number.pnumber 
-      FROM list_phone 
-      JOIN phone_number ON list_phone.id_phone_number = phone_number.id 
-      JOIN phone_category ON phone_number.id_phone_category = phone_category.id 
-      WHERE list_phone.id_person = {0}
-      ORDER BY phone_category.name;
-      */
-    }
-
-    public void EntryGetPictureList(int id_person)
-    {
-      // TODO
-      /*
-      SELECT 
-      picture.id, picture.name 
-      FROM list_picture 
-      JOIN picture ON list_picture.id_picture = picture.id 
-      WHERE list_picture.id_person = {0}
-      ORDER BY picture.name;
-      */
-    }
-
-    private int EntryAddCountry(SQLiteConnection con, int countryCode, string countryName)
-    {
       string stm;
-
       stm = string.Format(
         "REPLACE INTO country " +
         "(country_code, country_name)" +
@@ -193,16 +138,19 @@ ORDER BY phone_category.name;
         "({0}, {1})",
         countryCode, countryName);
       var cmd = new SQLiteCommand(stm, con);
-      var result = cmd.ExecuteScalar();
-      if (result == null)
-        return -1;
-      return (int)result;
+      var result = cmd.ExecuteNonQuery();
+      if (result == 0)
+        return 0;
+      return con.LastInsertRowId;
     }
 
-    private int EntryAddCity(SQLiteConnection con, string postalCode, string cityName, int idCountry)
+    private long EntryAddCity(SQLiteConnection con, string postalCode, string cityName, long idCountry=49)
     {
-      string stm;
+      long idEntry = EntryGetCityId(con, postalCode, cityName, idCountry);
+      if (idEntry != 0)
+        return idEntry;
 
+      string stm;
       stm = string.Format(
         "REPLACE INTO city " +
         "(postal_code, city_name, id_country)" +
@@ -212,16 +160,19 @@ ORDER BY phone_category.name;
 
       var cmd = new SQLiteCommand(stm, con);
 
-      var result = cmd.ExecuteScalar();
-      if (result == null)
-        return -1;
-      return (int)result;
+      var result = cmd.ExecuteNonQuery();
+      if (result == 0)
+        return 0;
+      return con.LastInsertRowId;
     }
 
-    private int EntryAddStreet(SQLiteConnection con, string streetName, int idCity)
+    private long EntryAddStreet(SQLiteConnection con, string streetName, long idCity)
     {
-      string stm;
+      long idEntry = EntryGetStreetId(con, idCity, streetName);
+      if (idEntry != 0)
+        return idEntry;
 
+      string stm;
       stm = string.Format(
         "REPLACE INTO street " +
         "(name, id_city)" +
@@ -231,13 +182,13 @@ ORDER BY phone_category.name;
 
       var cmd = new SQLiteCommand(stm, con);
 
-      var result = cmd.ExecuteScalar();
-      if (result == null)
-        return -1;
-      return (int)result;
+      var result = cmd.ExecuteNonQuery();
+      if (result == 0)
+        return 0;
+      return con.LastInsertRowId;
     }
 
-    private int EntryAddAddress(SQLiteConnection con, int streetId, int idCity, string houseNumber)
+    private long EntryAddAddress(SQLiteConnection con, long streetId, long idCity, string houseNumber)
     {
       string stm;
 
@@ -250,13 +201,13 @@ ORDER BY phone_category.name;
 
       var cmd = new SQLiteCommand(stm, con);
 
-      var result = cmd.ExecuteScalar();
-      if (result == null)
-        return -1;
-      return (int)result;
+      var result = cmd.ExecuteNonQuery();
+      if (result == 0)
+        return 0;
+      return con.LastInsertRowId;
     }
 
-    private int EntryAddPerson(SQLiteConnection con, string nameFirst, string nameLast, int idAddress)
+    private long EntryAddPerson(SQLiteConnection con, string nameFirst, string nameLast, long idAddress)
     {
       string stm;
 
@@ -267,13 +218,14 @@ ORDER BY phone_category.name;
         "({0}, {1}, {2})",
         nameFirst, nameLast, idAddress);
       var cmd = new SQLiteCommand(stm, con);
-      var result = cmd.ExecuteScalar();
-      if (result == null)
-        return -1;
-      return (int)result;
+
+      var result = cmd.ExecuteNonQuery();
+      if (result == 0)
+        return 0;
+      return con.LastInsertRowId;
     }
 
-    private int EntryAddPicture(SQLiteConnection con, string fileLocation)
+    private long EntryAddPicture(SQLiteConnection con, string fileLocation)
     {
       string stm;
 
@@ -289,14 +241,18 @@ ORDER BY phone_category.name;
       var cmd = new SQLiteCommand(stm, con);
       cmd.Parameters.Add("@data", System.Data.DbType.Byte, fileData.Length).Value = fileData;
 
-      var result = cmd.ExecuteScalar();
-      if (result == null)
-        return -1;
-      return (int)result;
+      var result = cmd.ExecuteNonQuery();
+      if (result == 0)
+        return 0;
+      return con.LastInsertRowId;
     }
 
-    private int EntryAddCategory(SQLiteConnection con, string phoneCategory)
+    private long EntryAddPhoneCategory(SQLiteConnection con, string phoneCategory)
     {
+      long idCategory = EntryGetPhoneCategpryId(con, phoneCategory);
+      if (idCategory != 0)
+        return idCategory;
+
       string stm = string.Format(
         "REPLACE INTO phone_category " +
         "(name)" +
@@ -306,13 +262,13 @@ ORDER BY phone_category.name;
 
       var cmd = new SQLiteCommand(stm, con);
 
-      var result = cmd.ExecuteScalar();
-      if (result == null)
-        return -1;
-      return (int)result;
+      var result = cmd.ExecuteNonQuery();
+      if (result == 0)
+        return 0;
+      return con.LastInsertRowId;
     }
 
-    private int EntryAddPhone(SQLiteConnection con, int id_person, string phoneNumber, int idPhoneCategory)
+    private long EntryAddPhone(SQLiteConnection con, long id_person, string phoneNumber, long idPhoneCategory)
     {
       string stm = string.Format(
         "INSERT INTO phone_number " +
@@ -323,23 +279,42 @@ ORDER BY phone_category.name;
 
       var cmd = new SQLiteCommand(stm, con);
 
-      var result = cmd.ExecuteScalar();
-      if (result == null)
-        return -1;
-      return (int)result;
+      var result = cmd.ExecuteNonQuery();
+      if (result == 0)
+        return 0;
+      return con.LastInsertRowId;
     }
 
-    public Boolean AddPhone(int id_person, string phoneNumber, string phoneCategory)
+    private Boolean EntryAddPhoneNumber(SQLiteConnection con, long id_person, string phoneNumber, long phoneCategory)
+    {
+      long resultId = EntryAddPhone(con, id_person, phoneNumber, phoneCategory);
+      if (resultId == 0)
+        throw new Exception("Error adding phone!");
+
+      string stm = string.Format(
+        "INSERT INTO list_phone " +
+        "(id_phone_number, id_person)" +
+        " VALUES " +
+        "({0}, {1})",
+        resultId, id_person);
+
+      var cmd = new SQLiteCommand(stm, con);
+
+      var result = cmd.ExecuteNonQuery();
+      return result == 1;
+    }
+
+    public Boolean AddPhone(long id_person, string phoneNumber, string phoneCategory)
     {
       var con = new SQLiteConnection(_dbSource);
       con.Open();
 
-      int resultId = EntryAddCategory(con, phoneCategory);
-      if (resultId < 0)
+      long resultId = EntryAddPhoneCategory(con, phoneCategory);
+      if (resultId == 0)
         throw new Exception("Error adding phone category!");
 
       resultId = EntryAddPhone(con, id_person, phoneNumber, resultId);
-      if (resultId < 0)
+      if (resultId == 0)
         throw new Exception("Error adding phone!");
 
       string stm = string.Format(
@@ -362,7 +337,7 @@ ORDER BY phone_category.name;
       var con = new SQLiteConnection(_dbSource);
       con.Open();
 
-      int resultId = EntryAddPicture(con, fileLocation);
+      long resultId = EntryAddPicture(con, fileLocation);
       if (resultId < 0)
         throw new Exception("Error adding phone category!");
 
@@ -402,7 +377,7 @@ ORDER BY phone_category.name;
       var con = new SQLiteConnection(_dbSource);
       con.Open();
 
-      int idCountry = 0;
+      long idCountry = 0;
       if (!string.IsNullOrEmpty(countryName))
       {
         idCountry = EntryAddCountry(con, countryCode, countryName);
@@ -410,7 +385,7 @@ ORDER BY phone_category.name;
           throw new Exception("Error adding country!");
       }
 
-      int idCity = 0;
+      long idCity = 0;
       if (!string.IsNullOrEmpty(cityName) && !string.IsNullOrEmpty(postalCode))
       {
         if (string.IsNullOrEmpty(postalCode))
@@ -422,7 +397,7 @@ ORDER BY phone_category.name;
           throw new Exception("Error adding city!");
       }
 
-      int idStreet = 0;
+      long idStreet = 0;
       if (!string.IsNullOrEmpty(streetName))
       {
         idStreet = EntryAddStreet(con, streetName, idCity);
@@ -433,11 +408,11 @@ ORDER BY phone_category.name;
       if (string.IsNullOrEmpty(houseNumber))
         houseNumber = "NULL";
 
-      int idAddress = EntryAddAddress(con, idStreet, idCity, houseNumber);
+      long idAddress = EntryAddAddress(con, idStreet, idCity, houseNumber);
       if (idAddress < 0)
         throw new Exception("Error adding address!");
 
-      int idPerson = EntryAddPerson(con, nameFirst, nameLast, idAddress);
+      long idPerson = EntryAddPerson(con, nameFirst, nameLast, idAddress);
 
       con.Close();
 
@@ -459,9 +434,329 @@ ORDER BY phone_category.name;
       return result == 1;
     }
 
-    public void EntryModify()
+    public Boolean EntryUpdatePerson(SQLiteConnection con, int id_person, string nameFirst, string nameLast)
+    {
+      if (nameFirst == null && nameLast == null)
+        return false;
+
+      string updateColumn = "";
+      if (nameFirst != null)
+        updateColumn += string.Format("name_first = {0}", nameFirst);
+
+      if (nameLast != null)
+      {
+        if (updateColumn.Length > 0)
+          updateColumn += ", ";
+        updateColumn += string.Format("name_last = {0}", nameLast);
+      }
+
+      string stm;
+
+      stm = string.Format(
+        "UPDATE person " +
+        "SET " + updateColumn +
+        " WHERE " +
+        "person.id = {0}",
+        id_person);
+      var cmd = new SQLiteCommand(stm, con);
+      var result = cmd.ExecuteNonQuery();
+      return result == 1;
+    }
+
+    public Boolean EntryUpdateCity(
+      SQLiteConnection con, long idPerson, long idCity, string postalCode, string cityName)
+    {
+      long idAdress = EntryGetAddressId(con, idPerson);
+
+      if (postalCode == "" && cityName == "")
+      {
+        // Todo: remove city
+      }
+
+      if (cityName != null)
+      {
+        // Todo: if city only assigned to one person, update city
+        if (idCity == 0)
+          idCity = EntryAddCity(con, postalCode, cityName);
+      }
+
+      if (idCity == 0)
+        throw new Exception("Could not update city!");
+
+      string stm;
+      stm = string.Format(
+        "UPDATE address " +
+        "SET id_city = {0}" +
+        "WHERE " +
+        "address.id = {1}",
+        idCity, idAdress);
+      var cmd = new SQLiteCommand(stm, con);
+      var result = cmd.ExecuteNonQuery();
+      return result == 1;
+    }
+
+    public Boolean EntryUpdateStreet(
+      SQLiteConnection con, long idPerson, long idStreet, string streetName, string houseNumber)
+    {
+      long idAdress = EntryGetAddressId(con, idPerson);
+      long idCity = EntryGetCityId(con, idAdress);
+
+      if (streetName == "" && houseNumber == "")
+      {
+        // Todo: remove city
+      }
+
+      if (streetName != null)
+      {
+        // Todo: if street only assigned to one person, update street
+        if (idStreet == 0)
+          idStreet = EntryAddStreet(con, streetName, idCity);
+      }
+
+      string stm;
+      stm = string.Format(
+        "UPDATE address " +
+        "SET id_street = {0}, house_number = {1}" +
+        "WHERE " +
+        "address.id = {2}",
+        idStreet, houseNumber, idAdress);
+      var cmd = new SQLiteCommand(stm, con);
+      var result = cmd.ExecuteNonQuery();
+      return result == 1;
+    }
+
+    public Boolean EntryUpdatePhoneCategory(
+      SQLiteConnection con, long idPerson, long idPhoneNumber, long idPhoneCategory, string phoneCategory)
+    {
+
+      if (phoneCategory == "")
+      {
+        // Todo: remove
+      }
+
+      if (phoneCategory != null)
+      {
+        // Todo: if street only assigned to one person, update street
+        if (idPhoneCategory == 0)
+          idPhoneCategory = EntryAddPhoneCategory(con, phoneCategory);
+      }
+
+      if (idPhoneNumber == 0)
+        idPhoneNumber = EntryGetPhoneId(con, idPerson);
+
+      if (idPhoneNumber == 0)
+        return AddPhone(idPerson, "", phoneCategory);
+
+      string stm;
+      stm = string.Format(
+        "UPDATE phone_number " +
+        "SET id_phone_category = {0}" +
+        "WHERE " +
+        "id = {2}",
+        idPhoneCategory, idPhoneNumber);
+      var cmd = new SQLiteCommand(stm, con);
+      var result = cmd.ExecuteNonQuery();
+      return result == 1;
+    }
+
+    public Boolean EntryUpdatePhoneNumber(
+      SQLiteConnection con, long idPerson, long idPhoneNumber, long idPhoneCategory, string phoneNumber)
+    {
+
+      if (phoneNumber == "")
+      {
+        // Todo: remove
+      }
+
+      if (idPhoneNumber == 0)
+        return EntryAddPhoneNumber(con, idPerson, phoneNumber, idPhoneCategory);
+
+      string stm;
+      stm = string.Format(
+        "UPDATE address " +
+        "SET id_street = {0}, house_number = {1}" +
+        "WHERE " +
+        "address.id = {2}",
+        idStreet, houseNumber, idAdress);
+      var cmd = new SQLiteCommand(stm, con);
+      var result = cmd.ExecuteNonQuery();
+      return result == 1;
+    }
+
+    private long EntryGetPhoneCategpryId(SQLiteConnection con, string phoneCategpry)
+    {
+      string stm = string.Format(
+        "SELECT id " +
+        "FROM phone_category " +
+        "WHERE " +
+        "name = {0}",
+        phoneCategpry);
+
+      var cmd = new SQLiteCommand(stm, con);
+
+      SQLiteDataReader reader = cmd.ExecuteReader();
+      if (!reader.HasRows)
+        return 0;
+      reader.Read();
+      return reader.GetInt64(0);
+    }
+
+    private long EntryGetPhoneId(SQLiteConnection con, long idPerson, long idCategory)
+    {
+      // Todo: this needs categoryId!!!
+      string stm = string.Format(
+        "SELECT id " +
+        "FROM list_phone " +
+        "JOIN phone_number ON list_phone.id_phone_number = phone_number.id" +
+        "WHERE " +
+        "list_phone.id_person = {0} and phone_number.id_phone_category = {1}",
+        idPerson, idCategory);
+
+      var cmd = new SQLiteCommand(stm, con);
+
+      SQLiteDataReader reader = cmd.ExecuteReader();
+      if (!reader.HasRows)
+        return 0;
+      reader.Read();
+      return reader.GetInt64(0);
+    }
+
+    public long EntryGetCityId(SQLiteConnection con, string postalCode, string cityName, long idCountry = 49)
+    {
+      string stm = string.Format(
+        "SELECT id " +
+        "FROM city " +
+        "WHERE " +
+        "city_name = {0} and postal_code = {1} and id_country = {2}",
+        cityName, postalCode, idCountry);
+
+      var cmd = new SQLiteCommand(stm, con);
+
+      SQLiteDataReader reader = cmd.ExecuteReader();
+      if (!reader.HasRows)
+        return 0;
+      reader.Read();
+      return reader.GetInt64(0);
+    }
+
+    public long EntryGetCountryId(SQLiteConnection con, int countryCode, string countryName)
+    {
+      string stm = string.Format(
+        "SELECT id " +
+        "FROM country " +
+        "WHERE " +
+        "country_code = {0} and country_name = {1}",
+        countryCode, countryName);
+
+      var cmd = new SQLiteCommand(stm, con);
+
+      SQLiteDataReader reader = cmd.ExecuteReader();
+      if (!reader.HasRows)
+        return 0;
+      reader.Read();
+      return reader.GetInt64(0);
+    }
+
+    public long EntryGetCityId(SQLiteConnection con, long idAdress)
+    {
+      string stm = string.Format(
+        "SELECT id_city " +
+        "FROM adress " +
+        "WHERE " +
+        "id = {0}",
+        idAdress);
+
+      var cmd = new SQLiteCommand(stm, con);
+
+      SQLiteDataReader reader = cmd.ExecuteReader();
+      if (!reader.HasRows)
+        return 0;
+      reader.Read();
+      return reader.GetInt64(0);
+    }
+
+    public long EntryGetAddressId(SQLiteConnection con, long idPerson)
+    {
+      string stm = string.Format(
+        "SELECT id_address " +
+        "FROM person " +
+        "WHERE " +
+        "id = {0}",
+        idPerson);
+
+      var cmd = new SQLiteCommand(stm, con);
+
+      SQLiteDataReader reader = cmd.ExecuteReader();
+      if (!reader.HasRows)
+        return 0;
+      reader.Read();
+      return reader.GetInt64(0);
+    }
+
+    public long EntryGetStreetId(SQLiteConnection con, long idCity, string streetName)
+    {
+      string stm = string.Format(
+        "select id " +
+        "FROM street " +
+        "WHERE " +
+        "id_city = {0} and name = {1}",
+        idCity, streetName);
+
+      var cmd = new SQLiteCommand(stm, con);
+
+      SQLiteDataReader reader = cmd.ExecuteReader();
+      if (!reader.HasRows)
+        return 0;
+      reader.Read();
+      return reader.GetInt64(0);
+    }
+
+
+    public void EntryGetPhone(SQLiteConnection con, int id_person)
     {
       // TODO
+      /*
+      SELECT
+      phone_category.name, phone_number.pnumber
+      FROM list_phone 
+      JOIN phone_number ON list_phone.id_phone_number = phone_number.id 
+      JOIN phone_category ON phone_number.id_phone_category = phone_category.id 
+      WHERE list_phone.id_person = {0}
+      ORDER BY phone_category.name;
+      */
+    }
+
+    public void EntryGetPhoneList(SQLiteConnection con, int id_person)
+    {
+      // TODO
+      /*
+      SELECT 
+      phone_number.id, phone_category.name, phone_number.pnumber 
+      FROM list_phone 
+      JOIN phone_number ON list_phone.id_phone_number = phone_number.id 
+      JOIN phone_category ON phone_number.id_phone_category = phone_category.id 
+      WHERE list_phone.id_person = {0}
+      ORDER BY phone_category.name;
+      */
+    }
+
+    public void EntryGetPictureList(SQLiteConnection con, int id_person)
+    {
+      // TODO
+      /*
+      SELECT 
+      picture.id, picture.name 
+      FROM list_picture 
+      JOIN picture ON list_picture.id_picture = picture.id 
+      WHERE list_picture.id_person = {0}
+      ORDER BY picture.name;
+      */
     }
   }
 }
+
+/*
+      SQLiteConnection con, int id_person,
+      string nameFirst, string nameLast,
+      string streetName, string houseNumber, string postalCode, string cityName,
+ */
