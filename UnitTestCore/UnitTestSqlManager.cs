@@ -28,11 +28,29 @@ namespace UnitTestCore
     }
 
     [TestMethod]
-    public void TestMethodEntryAdd()
+    public void TestMethodClear()
     {
       SqlManager db = new SqlManager(debug: true);
       db.DbInitialize();
-      db.EntryAdd();
+      db.DbClear();
+      Assert.IsTrue(false);
+    }
+
+    [TestMethod]
+    public void TestMethodEntryAddPhone()
+    {
+      SqlManager db = new SqlManager(debug: true);
+      db.DbInitialize();
+      db.EntryAddPhone(0, "0", ""/*TODO*/);
+      Assert.IsTrue(false);
+    }
+
+    [TestMethod]
+    public void TestMethodEntryAddPicture()
+    {
+      SqlManager db = new SqlManager(debug: true);
+      db.DbInitialize();
+      db.EntryAddPicture(0, ""/*TODO*/);
       Assert.IsTrue(false);
     }
 
@@ -41,7 +59,7 @@ namespace UnitTestCore
     {
       SqlManager db = new SqlManager(debug: true);
       db.DbInitialize();
-      db.EntryRemove();
+      db.EntryRemove(0/*TODO*/);
       Assert.IsTrue(false);
     }
 
