@@ -1,12 +1,12 @@
 CREATE TABLE country (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY NOT NULL,
   country_code INTEGER UNIQUE,
   country_name TEXT NOT NULL
 );
 
 CREATE TABLE city (
-  id INTEGER PRIMARY KEY,
-  city_code INTEGER UNIQUE,
+  id INTEGER PRIMARY KEY NOT NULL,
+  postal_code TEXT UNIQUE,
   city_name TEXT NOT NULL,
   id_country INTEGER,
     FOREIGN KEY (id_country) 
@@ -16,7 +16,7 @@ CREATE TABLE city (
 );
 
 CREATE TABLE street (
-	id INTEGER PRIMARY KEY,
+	id INTEGER PRIMARY KEY NOT NULL,
 	name TEXT NOT NULL,
   id_city INTEGER,
   FOREIGN KEY (id_city) 
@@ -26,10 +26,10 @@ CREATE TABLE street (
 );
 
 CREATE TABLE address (
-	id INTEGER PRIMARY KEY,
+	id INTEGER PRIMARY KEY NOT NULL,
   id_street INTEGER,
   id_city INTEGER,
-  house_number INTEGER,
+  house_number TEXT,
   FOREIGN KEY (id_street) 
     REFERENCES street (id) 
       ON DELETE CASCADE 
@@ -41,23 +41,23 @@ CREATE TABLE address (
 );
 
 CREATE TABLE person (
-	id INTEGER PRIMARY KEY,
+	id INTEGER PRIMARY KEY NOT NULL,
   name_first TEXT NOT NULL,
 	name_last TEXT NOT NULL,
-	id_adress INTEGER,
-  FOREIGN KEY (id_adress) 
-    REFERENCES adress (id) 
+	id_address INTEGER,
+  FOREIGN KEY (id_address) 
+    REFERENCES address (id) 
       ON DELETE CASCADE 
       ON UPDATE NO ACTION
 );
 
 CREATE TABLE phone_category (
-	id INTEGER PRIMARY KEY,
+	id INTEGER PRIMARY KEY NOT NULL,
   name TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE phone_number (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY NOT NULL,
   pnumber TEXT,
   id_phone_category INTEGER,
   FOREIGN KEY (id_phone_category) 
@@ -81,7 +81,7 @@ CREATE TABLE list_phone(
 );
 
 CREATE TABLE picture (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY NOT NULL,
   name TEXT NOT NULL,
   data BLOB NOT NULL
 );

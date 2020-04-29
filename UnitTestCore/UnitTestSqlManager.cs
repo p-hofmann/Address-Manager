@@ -13,27 +13,48 @@ namespace UnitTestCore
     [TestMethod]
     public void TestMethodSqliteDbCreate()
     {
-      SqlManager db = new SqlManager(debug: true);
-      db.DbInitialize();
-      Assert.IsTrue(false);
+      try
+      {
+        SqlManager db = new SqlManager(debug: true);
+        db.DbInitialize();
+      }
+      catch (Exception ex)
+      {
+        Assert.Fail("Exception: " + ex.Message);
+      }
     }
 
     [TestMethod]
     public void TestMethodSqliteDbDelete()
     {
-      SqlManager db = new SqlManager(debug: true);
-      db.DbInitialize();
-      db.DbDelete();
-      Assert.IsTrue(false);
+      try
+      {
+        SqlManager db = new SqlManager(debug: true);
+        db.DbInitialize();
+        db.DbDelete();
+      }
+      catch (Exception ex)
+      {
+        Assert.Fail("Exception: " + ex.Message);
+      }
     }
 
     [TestMethod]
     public void TestMethodClear()
     {
-      SqlManager db = new SqlManager(debug: true);
-      db.DbInitialize();
-      db.DbClear();
-      Assert.IsTrue(false);
+      try
+      {
+        SqlManager db = new SqlManager(debug: true);
+        db.DbInitialize();
+        //TODO: add some entries
+        db.DbClear();
+        //TODO: test how many entries are there
+        db.DbDelete();
+      }
+      catch (Exception ex)
+      {
+        Assert.Fail("Exception: " + ex.Message);
+      }
     }
 
     [TestMethod]
@@ -41,7 +62,7 @@ namespace UnitTestCore
     {
       SqlManager db = new SqlManager(debug: true);
       db.DbInitialize();
-      db.EntryAddPhone(0, "0", ""/*TODO*/);
+      db.AddPhone(0, "0", ""/*TODO*/);
       Assert.IsTrue(false);
     }
 
@@ -50,7 +71,7 @@ namespace UnitTestCore
     {
       SqlManager db = new SqlManager(debug: true);
       db.DbInitialize();
-      db.EntryAddPicture(0, ""/*TODO*/);
+      db.AddPicture(0, ""/*TODO*/);
       Assert.IsTrue(false);
     }
 
@@ -59,7 +80,7 @@ namespace UnitTestCore
     {
       SqlManager db = new SqlManager(debug: true);
       db.DbInitialize();
-      db.EntryRemove(0/*TODO*/);
+      db.RemovePerson(0/*TODO*/);
       Assert.IsTrue(false);
     }
 
