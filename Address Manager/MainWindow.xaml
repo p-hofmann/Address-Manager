@@ -6,7 +6,65 @@
         xmlns:local="clr-namespace:Address_Manager"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+  <Grid>
+    <TabControl Margin="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" MinWidth="200" MinHeight="100">
+      <TabItem x:Name="TabListPerson" Header="List" MinWidth="50">
+        <Grid Background="#FFE5E5E5">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition MaxHeight="35" />
+            <RowDefinition />
+            <RowDefinition MaxHeight="35" />
+          </Grid.RowDefinitions>
+          <StackPanel Grid.Column="0" Grid.Row="0"/>
+            <DataGrid Grid.Column="0" Grid.Row="1"  AutoGenerateColumns="False" x:Name="DatGridNameList" ColumnHeaderHeight="30" HeadersVisibility="Column">
+              <DataGrid.Columns >
+                <DataGridTextColumn Binding="{Binding Path=Name}" MinWidth="50">
+                  <DataGridTextColumn.HeaderTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="Name" TextWrapping="Wrap"/>
+                    </DataTemplate>
+                  </DataGridTextColumn.HeaderTemplate>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Path=Family}" MinWidth="50">
+                <DataGridTextColumn.HeaderTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="Family" TextWrapping="Wrap"/>
+                  </DataTemplate>
+                </DataGridTextColumn.HeaderTemplate>
+              </DataGridTextColumn>
+              <DataGridTextColumn Binding="{Binding Path=City}" MinWidth="50">
+                <DataGridTextColumn.HeaderTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="City" TextWrapping="Wrap"/>
+                  </DataTemplate>
+                </DataGridTextColumn.HeaderTemplate>
+              </DataGridTextColumn>
+              <DataGridTextColumn Binding="{Binding Path=Street}" MinWidth="50">
+                <DataGridTextColumn.HeaderTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="Street" TextWrapping="Wrap"/>
+                  </DataTemplate>
+                </DataGridTextColumn.HeaderTemplate>
+              </DataGridTextColumn>
+              <DataGridTextColumn Binding="{Binding Path=StreetNumber}" MinWidth="50">
+                <DataGridTextColumn.HeaderTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="Number" TextWrapping="Wrap"/>
+                  </DataTemplate>
+                </DataGridTextColumn.HeaderTemplate>
+              </DataGridTextColumn>
+            </DataGrid.Columns>
+            </DataGrid>
+            <StackPanel Grid.Column="0" Grid.Row="2"/>
+        </Grid>
+      </TabItem>
+      <TabItem Header="Edit Person">
+        <Grid Background="#FFE5E5E5"/>
+      </TabItem>
+    </TabControl>
+
+  </Grid>
 </Window>

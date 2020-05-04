@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,14 +16,27 @@ using System.Windows.Shapes;
 
 namespace Address_Manager
 {
-    /// <summary>
-    /// Interaktionslogik für MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+
+  public class DataObject
+  {
+    public string Name { get; set; }
+    public string Family { get; set; }
+    public string City { get; set; }
+    public string Street { get; set; }
+    public string StreetNumber { get; set; }
+  }
+
+  /// <summary>
+  /// Interaktionslogik für MainWindow.xaml
+  /// </summary>
+  public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
-        }
+            var list = new ObservableCollection<DataObject>();
+            list.Add(new DataObject() { Name = "Name", Family = "Family", City = "City", Street = "Street", StreetNumber = "StreetNumber" });
+            this.DatGridNameList.ItemsSource = list;
+    }
     }
 }

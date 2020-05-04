@@ -249,7 +249,7 @@ namespace CoreLib
 
     private long EntryAddPhoneCategory(SQLiteConnection con, string phoneCategory)
     {
-      long idCategory = EntryGetPhoneCategpryId(con, phoneCategory);
+      long idCategory = EntryGetPhoneCategoryId(con, phoneCategory);
       if (idCategory != 0)
         return idCategory;
 
@@ -268,7 +268,7 @@ namespace CoreLib
       return con.LastInsertRowId;
     }
 
-    private long EntryAddPhone(SQLiteConnection con, long id_person, string phoneNumber, long idPhoneCategory)
+    private long EntryAddPhoneNumber(SQLiteConnection con, long id_person, string phoneNumber, long idPhoneCategory)
     {
       string stm = string.Format(
         "INSERT INTO phone_number " +
@@ -285,18 +285,14 @@ namespace CoreLib
       return con.LastInsertRowId;
     }
 
-    private Boolean EntryAddPhoneNumber(SQLiteConnection con, long id_person, string phoneNumber, long phoneCategory)
+    private Boolean EntryAddPhoneEntry(SQLiteConnection con, long id_person, long idPhoneNumber)
     {
-      long resultId = EntryAddPhone(con, id_person, phoneNumber, phoneCategory);
-      if (resultId == 0)
-        throw new Exception("Error adding phone!");
-
       string stm = string.Format(
         "INSERT INTO list_phone " +
         "(id_phone_number, id_person)" +
         " VALUES " +
         "({0}, {1})",
-        resultId, id_person);
+        idPhoneNumber, id_person);
 
       var cmd = new SQLiteCommand(stm, con);
 
@@ -309,12 +305,12 @@ namespace CoreLib
       var con = new SQLiteConnection(_dbSource);
       con.Open();
 
-      long resultId = EntryAddPhoneCategory(con, phoneCategory);
-      if (resultId == 0)
+      long idPhoneCategory = EntryAddPhoneCategory(con, phoneCategory);
+      if (idPhoneCategory == 0)
         throw new Exception("Error adding phone category!");
 
-      resultId = EntryAddPhone(con, id_person, phoneNumber, resultId);
-      if (resultId == 0)
+      long idPhoneNumber = EntryAddPhoneNumber(con, id_person, phoneNumber, idPhoneCategory);
+      if (idPhoneNumber == 0)
         throw new Exception("Error adding phone!");
 
       string stm = string.Format(
@@ -322,7 +318,7 @@ namespace CoreLib
         "(id_phone_number, id_person)" +
         " VALUES " +
         "({0}, {1})",
-        resultId, id_person);
+        idPhoneNumber, id_person);
 
       var cmd = new SQLiteCommand(stm, con);
 
@@ -526,7 +522,7 @@ namespace CoreLib
     }
 
     public Boolean EntryUpdatePhoneCategory(
-      SQLiteConnection con, long idPerson, long idPhoneNumber, long idPhoneCategory, string phoneCategory)
+      SQLiteConnection con, long idPerson, long idPhoneEntry, long idPhoneCategory, string phoneCategory, string phoneNumber)
     {
 
       if (phoneCategory == "")
@@ -541,10 +537,13 @@ namespace CoreLib
           idPhoneCategory = EntryAddPhoneCategory(con, phoneCategory);
       }
 
-      if (idPhoneNumber == 0)
-        idPhoneNumber = EntryGetPhoneId(con, idPerson);
+      if (idPhoneCategory == 0)
+        throw new Exception("Could not create phone category!");
 
-      if (idPhoneNumber == 0)
+      if (idPhoneEntry == 0)
+        idPhoneEntry = EntryAddPhoneNumber(con, idPerson, phoneNumber, idPhoneCategory);
+
+      if (idPhoneEntry == 0)
         return AddPhone(idPerson, "", phoneCategory);
 
       string stm;
@@ -552,45 +551,46 @@ namespace CoreLib
         "UPDATE phone_number " +
         "SET id_phone_category = {0}" +
         "WHERE " +
-        "id = {2}",
-        idPhoneCategory, idPhoneNumber);
+        "id = {1}",
+        idPhoneCategory, idPhoneEntry);
       var cmd = new SQLiteCommand(stm, con);
       var result = cmd.ExecuteNonQuery();
       return result == 1;
     }
 
     public Boolean EntryUpdatePhoneNumber(
-      SQLiteConnection con, long idPerson, long idPhoneNumber, long idPhoneCategory, string phoneNumber)
+      SQLiteConnection con, long idPerson, long idPhoneEntry, long idPhoneCategory, string phoneNumber, string phoneCategory="")
     {
 
-      if (phoneNumber == "")
-      {
-        // Todo: remove
-      }
+      if (idPhoneCategory == 0)
+        idPhoneCategory = EntryGetPhoneCategoryId(con, phoneCategory);
 
-      if (idPhoneNumber == 0)
-        return EntryAddPhoneNumber(con, idPerson, phoneNumber, idPhoneCategory);
+      if (idPhoneCategory == 0)
+        throw new Exception("Could not create phone category!");
+
+      if (idPhoneEntry == 0)
+        idPhoneEntry = EntryGetPhoneEntryId(con, idPerson, idPhoneCategory);
 
       string stm;
       stm = string.Format(
-        "UPDATE address " +
-        "SET id_street = {0}, house_number = {1}" +
+        "UPDATE phone_number " +
+        "SET pnumber = {0}" +
         "WHERE " +
-        "address.id = {2}",
-        idStreet, houseNumber, idAdress);
+        "id = {1}",
+        phoneNumber, idPhoneEntry);
       var cmd = new SQLiteCommand(stm, con);
       var result = cmd.ExecuteNonQuery();
       return result == 1;
     }
 
-    private long EntryGetPhoneCategpryId(SQLiteConnection con, string phoneCategpry)
+    private long EntryGetPhoneCategoryId(SQLiteConnection con, string phoneCategory)
     {
       string stm = string.Format(
         "SELECT id " +
         "FROM phone_category " +
         "WHERE " +
         "name = {0}",
-        phoneCategpry);
+        phoneCategory);
 
       var cmd = new SQLiteCommand(stm, con);
 
@@ -601,7 +601,7 @@ namespace CoreLib
       return reader.GetInt64(0);
     }
 
-    private long EntryGetPhoneId(SQLiteConnection con, long idPerson, long idCategory)
+    private long EntryGetPhoneEntryId(SQLiteConnection con, long idPerson, long idCategory)
     {
       // Todo: this needs categoryId!!!
       string stm = string.Format(
