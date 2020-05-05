@@ -14,21 +14,52 @@
             <ColumnDefinition />
           </Grid.ColumnDefinitions>
           <Grid.RowDefinitions>
-            <RowDefinition MaxHeight="35" />
+            <RowDefinition MaxHeight="55" />
             <RowDefinition />
-            <RowDefinition MaxHeight="35" />
+            <!--<RowDefinition MaxHeight="35" />-->
           </Grid.RowDefinitions>
-          <StackPanel Grid.Column="0" Grid.Row="0"/>
-            <DataGrid Grid.Column="0" Grid.Row="1"  AutoGenerateColumns="False" x:Name="DatGridNameList" ColumnHeaderHeight="30" HeadersVisibility="Column">
-              <DataGrid.Columns >
-                <DataGridTextColumn Binding="{Binding Path=Name}" MinWidth="50">
-                  <DataGridTextColumn.HeaderTemplate>
-                    <DataTemplate>
-                      <TextBlock Text="Name" TextWrapping="Wrap"/>
-                    </DataTemplate>
-                  </DataGridTextColumn.HeaderTemplate>
-                </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Path=Family}" MinWidth="50">
+          <Grid Grid.Column="0" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition />
+              <ColumnDefinition />
+              <ColumnDefinition />
+              <ColumnDefinition />
+              <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="1,0,0,0">
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Name"/>
+              <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Margin="1,0,0,0">
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Family"/>
+              <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Margin="1,0,0,0">
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="City"/>
+              <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+            </StackPanel>
+            <StackPanel Grid.Column="3" Grid.Row="0" HorizontalAlignment="Left" Margin="1,0,0,0">
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Street"/>
+              <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+            </StackPanel>
+            <StackPanel Grid.Column="4" Grid.Row="0" HorizontalAlignment="Left" Margin="1,0,0,0">
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Str.Number"/>
+              <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+            </StackPanel>
+          </Grid>
+          <DataGrid Grid.Column="0" Grid.Row="1"  AutoGenerateColumns="False" x:Name="DatGridNameList" ColumnHeaderHeight="30" HeadersVisibility="Column">
+            <DataGrid.Columns >
+              <DataGridTextColumn Binding="{Binding Path=Name}" MinWidth="50">
+                <DataGridTextColumn.HeaderTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="Name" TextWrapping="Wrap"/>
+                  </DataTemplate>
+                </DataGridTextColumn.HeaderTemplate>
+              </DataGridTextColumn>
+              <DataGridTextColumn Binding="{Binding Path=Family}" MinWidth="50">
                 <DataGridTextColumn.HeaderTemplate>
                   <DataTemplate>
                     <TextBlock Text="Family" TextWrapping="Wrap"/>
@@ -49,7 +80,7 @@
                   </DataTemplate>
                 </DataGridTextColumn.HeaderTemplate>
               </DataGridTextColumn>
-              <DataGridTextColumn Binding="{Binding Path=StreetNumber}" MinWidth="50">
+              <DataGridTextColumn Binding="{Binding Path=StreetNumber}" MinWidth="53">
                 <DataGridTextColumn.HeaderTemplate>
                   <DataTemplate>
                     <TextBlock Text="Number" TextWrapping="Wrap"/>
@@ -57,12 +88,64 @@
                 </DataGridTextColumn.HeaderTemplate>
               </DataGridTextColumn>
             </DataGrid.Columns>
-            </DataGrid>
-            <StackPanel Grid.Column="0" Grid.Row="2"/>
+          </DataGrid>
+          <StackPanel Grid.Column="0" Grid.Row="2"/>
         </Grid>
       </TabItem>
       <TabItem Header="Edit Person">
-        <Grid Background="#FFE5E5E5"/>
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+          <Grid Grid.Column="0" Grid.Row="0" Background="#FFE5E5E5">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="1,0,0,0">
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Name"/>
+              <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Margin="1,0,0,0">
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Family"/>
+              <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+            </StackPanel>
+            <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Margin="1,0,0,0">
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="City"/>
+              <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+            </StackPanel>
+            <StackPanel Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" Margin="1,0,0,0">
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Street"/>
+              <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" Margin="1,0,0,0">
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Str.Number"/>
+              <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+            </StackPanel>
+          </Grid>
+          <GridSplitter Grid.Column="0" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,5" Height="3" />
+          <Grid Grid.Column="0" Grid.Row="2">
+            <DataGrid Grid.Column="0" Grid.Row="0" />
+          </Grid>
+          <GridSplitter Grid.Column="0" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,5" Height="3" />
+          <Grid Grid.Column="0" Grid.Row="4">
+            <DataGrid Grid.Column="0" Grid.Row="0" />
+          </Grid>
+        </Grid>
       </TabItem>
     </TabControl>
 
