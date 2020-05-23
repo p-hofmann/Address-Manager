@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Address_Manager"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Address Manager" Height="450" Width="800">
   <Grid>
-    <TabControl Margin="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" MinWidth="200" MinHeight="100">
+    <TabControl x:Name="TabControlMain" Margin="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" MinWidth="200" MinHeight="100">
       <TabItem x:Name="TabListPerson" Header="List" MinWidth="50">
         <Grid Background="#FFE5E5E5">
           <Grid.ColumnDefinitions>
@@ -20,6 +20,8 @@
           </Grid.RowDefinitions>
           <Grid Grid.Column="0" Grid.Row="0">
             <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="50" />
+              <ColumnDefinition />
               <ColumnDefinition />
               <ColumnDefinition />
               <ColumnDefinition />
@@ -29,72 +31,88 @@
             <Grid.RowDefinitions>
               <RowDefinition />
             </Grid.RowDefinitions>
-            <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="1,0,0,0">
-              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Name"/>
-              <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
-            </StackPanel>
+            <!--<StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="1,0,0,0">-->
+              <!--<Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="ID"/>-->
+            <Button x:Name="ButtonRefresh" Content="Refresh" Click="ButtonRefresh_Click"/>
+            <!--</StackPanel>-->
             <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Margin="1,0,0,0">
-              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Family"/>
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="ID"/>
               <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
             </StackPanel>
             <StackPanel Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Margin="1,0,0,0">
-              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="City"/>
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Name"/>
               <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
             </StackPanel>
             <StackPanel Grid.Column="3" Grid.Row="0" HorizontalAlignment="Left" Margin="1,0,0,0">
-              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Street"/>
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Family"/>
               <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
             </StackPanel>
             <StackPanel Grid.Column="4" Grid.Row="0" HorizontalAlignment="Left" Margin="1,0,0,0">
-              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Str.Number"/>
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="City"/>
+              <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+            </StackPanel>
+            <StackPanel Grid.Column="5" Grid.Row="0" HorizontalAlignment="Left" Margin="1,0,0,0">
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Street"/>
+              <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+            </StackPanel>
+            <StackPanel Grid.Column="6" Grid.Row="0" HorizontalAlignment="Left" Margin="1,0,0,0">
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Number"/>
               <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
             </StackPanel>
           </Grid>
-          <DataGrid Grid.Column="0" Grid.Row="1"  AutoGenerateColumns="False" x:Name="DatGridNameList" ColumnHeaderHeight="30" HeadersVisibility="Column">
+          <DataGrid Grid.Column="0" Grid.Row="1"  AutoGenerateColumns="False" x:Name="DatGridNameList" ColumnHeaderHeight="30" HeadersVisibility="Column" SelectionChanged="DatGridNameList_SelectionChanged" MouseDoubleClick="DatGridNameList_MouseDoubleClick">
             <DataGrid.Columns >
+              <DataGridTextColumn Binding="{Binding Path=PId}" MinWidth="50">
+                <DataGridTextColumn.HeaderTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="Id" TextWrapping="NoWrap"/>
+                  </DataTemplate>
+                </DataGridTextColumn.HeaderTemplate>
+              </DataGridTextColumn>
               <DataGridTextColumn Binding="{Binding Path=Name}" MinWidth="50">
                 <DataGridTextColumn.HeaderTemplate>
                   <DataTemplate>
-                    <TextBlock Text="Name" TextWrapping="Wrap"/>
+                    <TextBlock Text="Name" TextWrapping="NoWrap"/>
                   </DataTemplate>
                 </DataGridTextColumn.HeaderTemplate>
               </DataGridTextColumn>
               <DataGridTextColumn Binding="{Binding Path=Family}" MinWidth="50">
                 <DataGridTextColumn.HeaderTemplate>
                   <DataTemplate>
-                    <TextBlock Text="Family" TextWrapping="Wrap"/>
+                    <TextBlock Text="Family" TextWrapping="NoWrap"/>
                   </DataTemplate>
                 </DataGridTextColumn.HeaderTemplate>
               </DataGridTextColumn>
               <DataGridTextColumn Binding="{Binding Path=City}" MinWidth="50">
                 <DataGridTextColumn.HeaderTemplate>
                   <DataTemplate>
-                    <TextBlock Text="City" TextWrapping="Wrap"/>
+                    <TextBlock Text="City" TextWrapping="NoWrap"/>
                   </DataTemplate>
                 </DataGridTextColumn.HeaderTemplate>
               </DataGridTextColumn>
               <DataGridTextColumn Binding="{Binding Path=Street}" MinWidth="50">
                 <DataGridTextColumn.HeaderTemplate>
                   <DataTemplate>
-                    <TextBlock Text="Street" TextWrapping="Wrap"/>
+                    <TextBlock Text="Street" TextWrapping="NoWrap"/>
                   </DataTemplate>
                 </DataGridTextColumn.HeaderTemplate>
               </DataGridTextColumn>
-              <DataGridTextColumn Binding="{Binding Path=StreetNumber}" MinWidth="53">
+              <DataGridTextColumn Binding="{Binding Path=StreetNumber}" MinWidth="55">
                 <DataGridTextColumn.HeaderTemplate>
                   <DataTemplate>
-                    <TextBlock Text="Number" TextWrapping="Wrap"/>
+                    <TextBlock Text="Number" TextWrapping="NoWrap"/>
                   </DataTemplate>
                 </DataGridTextColumn.HeaderTemplate>
               </DataGridTextColumn>
             </DataGrid.Columns>
           </DataGrid>
-          <StackPanel Grid.Column="0" Grid.Row="2"/>
+          <!--<StackPanel Grid.Column="0" Grid.Row="2"/>-->
         </Grid>
       </TabItem>
-      <TabItem Header="Edit Person">
+      <TabItem x:Name="TabPerson" Header="Edit Person">
         <Grid>
           <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
           </Grid.ColumnDefinitions>
           <Grid.RowDefinitions>
@@ -115,36 +133,87 @@
               <RowDefinition Height="Auto" />
               <RowDefinition Height="Auto" />
               <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="1,0,0,0">
-              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Name"/>
-              <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
-            </StackPanel>
-            <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Margin="1,0,0,0">
-              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Family"/>
-              <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="PId:"/>
+              <TextBox x:Name="TBPId" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120" IsReadOnly="True"/>
             </StackPanel>
             <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Margin="1,0,0,0">
-              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="City"/>
-              <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Name"/>
+              <TextBox x:Name="TBName" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Margin="1,0,0,0">
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Family"/>
+              <TextBox x:Name="TBFamily" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
             </StackPanel>
             <StackPanel Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" Margin="1,0,0,0">
-              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Street"/>
-              <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="PostalCode"/>
+              <TextBox x:Name="TBPostalCode" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
             </StackPanel>
             <StackPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" Margin="1,0,0,0">
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="City"/>
+              <TextBox x:Name="TBCity" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+            </StackPanel>
+            <StackPanel Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" Margin="1,0,0,0">
+              <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Street"/>
+              <TextBox x:Name="TBStreet" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" Margin="1,0,0,0">
               <Label HorizontalAlignment="Left" VerticalAlignment="Top" Content="Str.Number"/>
-              <TextBox HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
+              <TextBox x:Name="TBSNumber" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" TextWrapping="Wrap" Width="120"/>
             </StackPanel>
           </Grid>
           <GridSplitter Grid.Column="0" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,5" Height="3" />
           <Grid Grid.Column="0" Grid.Row="2">
-            <DataGrid Grid.Column="0" Grid.Row="0" />
+            <StackPanel HorizontalAlignment="Left" Margin="1,0,0,0">
+              <Label Content="Phone Numbers" VerticalAlignment="Top" HorizontalAlignment="Left" />
+              <DataGrid Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                <DataGrid.Columns >
+                  <DataGridTextColumn Binding="{Binding Path=Category}" MinWidth="50">
+                    <DataGridTextColumn.HeaderTemplate>
+                      <DataTemplate>
+                        <TextBlock Text="Category" TextWrapping="NoWrap"/>
+                      </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                  </DataGridTextColumn>
+                  <DataGridTextColumn Binding="{Binding Path=Number}" MinWidth="50">
+                    <DataGridTextColumn.HeaderTemplate>
+                      <DataTemplate>
+                        <TextBlock Text="Number" TextWrapping="NoWrap"/>
+                      </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                  </DataGridTextColumn>
+                </DataGrid.Columns>
+              </DataGrid>
+            </StackPanel>
           </Grid>
           <GridSplitter Grid.Column="0" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,5" Height="3" />
           <Grid Grid.Column="0" Grid.Row="4">
-            <DataGrid Grid.Column="0" Grid.Row="0" />
+            <StackPanel HorizontalAlignment="Left" Margin="1,0,0,0">
+              <Label Content="Pictures" HorizontalAlignment="Left" VerticalAlignment="Top" />
+              <DataGrid Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                <DataGrid.Columns >
+                  <DataGridTextColumn Binding="{Binding Path=Name}" MinWidth="50">
+                    <DataGridTextColumn.HeaderTemplate>
+                      <DataTemplate>
+                        <TextBlock Text="Name" TextWrapping="NoWrap"/>
+                      </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                  </DataGridTextColumn>
+                </DataGrid.Columns>
+              </DataGrid>
+            </StackPanel>
           </Grid>
+          <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Margin="5,0,0,0">
+            <Button x:Name="BCProfileAdd" Content="New Profile" Click="BCProfileAdd_Click" />
+            <Button x:Name="BCProfileRemove" Content="Remove Profile" Click="BCProfileRemove_Click" />
+            <Button x:Name="BCPhoneAdd" Content="Add Phone" Margin="0,5,0,0" Click="BCPhoneAdd_Click" />
+            <Button x:Name="BCPhoneRemove" Content="Remove Phone" Click="BCPhoneRemove_Click" />
+            <Button x:Name="BCPictureAdd" Content="Add Picture" Margin="0,5,0,0" Click="BCPictureAdd_Click" />
+            <Button x:Name="BCPictureRemove" Content="Remove Picture" Click="BCPictureRemove_Click" />
+            <Button x:Name="BCPictureSave" Content="Save Picture" Click="BCPictureSave_Click" />
+          </StackPanel>
         </Grid>
       </TabItem>
     </TabControl>

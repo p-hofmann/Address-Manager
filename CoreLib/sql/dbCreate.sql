@@ -1,10 +1,10 @@
-CREATE TABLE country (
+CREATE TABLE IF NOT EXISTS country (
   id INTEGER PRIMARY KEY NOT NULL,
   country_code INTEGER UNIQUE,
   country_name TEXT NOT NULL
 );
 
-CREATE TABLE city (
+CREATE TABLE IF NOT EXISTS city (
   id INTEGER PRIMARY KEY NOT NULL,
   postal_code TEXT UNIQUE,
   city_name TEXT NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE city (
         ON UPDATE NO ACTION
 );
 
-CREATE TABLE street (
+CREATE TABLE IF NOT EXISTS street (
 	id INTEGER PRIMARY KEY NOT NULL,
 	name TEXT NOT NULL,
   id_city INTEGER,
@@ -25,7 +25,7 @@ CREATE TABLE street (
       ON UPDATE NO ACTION
 );
 
-CREATE TABLE address (
+CREATE TABLE IF NOT EXISTS address (
 	id INTEGER PRIMARY KEY NOT NULL,
   id_street INTEGER,
   id_city INTEGER,
@@ -40,7 +40,7 @@ CREATE TABLE address (
       ON UPDATE NO ACTION
 );
 
-CREATE TABLE person (
+CREATE TABLE IF NOT EXISTS person (
 	id INTEGER PRIMARY KEY NOT NULL,
   name_first TEXT NOT NULL,
 	name_last TEXT NOT NULL,
@@ -51,12 +51,12 @@ CREATE TABLE person (
       ON UPDATE NO ACTION
 );
 
-CREATE TABLE phone_category (
+CREATE TABLE IF NOT EXISTS phone_category (
 	id INTEGER PRIMARY KEY NOT NULL,
   name TEXT UNIQUE NOT NULL
 );
 
-CREATE TABLE phone_number (
+CREATE TABLE IF NOT EXISTS phone_number (
   id INTEGER PRIMARY KEY NOT NULL,
   pnumber TEXT,
   id_phone_category INTEGER,
@@ -66,7 +66,7 @@ CREATE TABLE phone_number (
       ON UPDATE NO ACTION
 );
 
-CREATE TABLE list_phone(
+CREATE TABLE IF NOT EXISTS list_phone(
   id_phone_number INTEGER,
   id_person INTEGER,
   PRIMARY KEY (id_phone_number, id_person),
@@ -80,13 +80,13 @@ CREATE TABLE list_phone(
         ON UPDATE NO ACTION
 );
 
-CREATE TABLE picture (
+CREATE TABLE IF NOT EXISTS picture (
   id INTEGER PRIMARY KEY NOT NULL,
   name TEXT NOT NULL,
   data BLOB NOT NULL
 );
 
-CREATE TABLE list_picture(
+CREATE TABLE IF NOT EXISTS list_picture(
   id_picture INTEGER,
   id_person INTEGER,
   PRIMARY KEY (id_picture, id_person),

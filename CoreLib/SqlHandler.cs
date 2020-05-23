@@ -1,13 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Data.SQLite;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace CoreLib
 {
   /// <summary>
   /// Container of all SQLite related methods
   /// </summary>
-  public class SqlManager
+  public class SqlHandler
   {
     const string _sqlCreateFileLocation = "./dbCreate.sql";
 
@@ -33,7 +35,7 @@ namespace CoreLib
     /// </summary>
     /// <param name="defaultDbLocation"></param>
     /// <param name="debug">Debug mode</param>
-    public SqlManager(string defaultDbLocation = "./sqlDatabase", Boolean debug = false)
+    public SqlHandler(string defaultDbLocation = "./sqlDatabase", Boolean debug = false)
     {
       _debug = debug;
       _dbLocation = defaultDbLocation;
@@ -352,6 +354,16 @@ namespace CoreLib
       return result == 1;
     }
 
+    public Boolean AddCountry(int countryCode, string countryName)
+    {
+      var con = new SQLiteConnection(_dbSource);
+      con.Open();
+
+      long resultId = EntryAddCountry(con, countryCode, countryName);
+
+      return resultId != 0;
+    }
+
     public Boolean AddPerson(
       string nameFirst, string nameLast,
       string streetName, string houseNumber, string postalCode, string cityName,
@@ -366,9 +378,9 @@ namespace CoreLib
       countryName = countryName.Trim();
 
       if (string.IsNullOrEmpty(nameFirst))
-        throw new Exception("Invalid first name!");
+        nameFirst = "";
       if (string.IsNullOrEmpty(nameLast))
-        throw new Exception("Invalid last name!");
+        nameLast = "";
 
       var con = new SQLiteConnection(_dbSource);
       con.Open();
@@ -711,6 +723,39 @@ namespace CoreLib
       return reader.GetInt64(0);
     }
 
+
+    public ObservableCollection<PersonHandler> GetListPerson()
+    {
+      var con = new SQLiteConnection(_dbSource);
+      con.Open();
+
+      string stm =
+        "SELECT person.id, person.name_first, person.name_last, address.id_city, address.id_street, address.house_number " +
+        "FROM person " +
+        "JOIN address ON address.id = person.id_address " +
+        "JOIN city ON city.id = address.id_city " +
+        "JOIN street ON street.id = address.id_street " +
+        "ORDER BY person.name_first;";
+
+      var cmd = new SQLiteCommand(stm, con);
+      SQLiteDataReader reader = cmd.ExecuteReader();
+      con.Close();
+
+      var list = new ObservableCollection<PersonHandler>();
+      while (reader.HasRows)
+      {
+        reader.Read();
+        list.Add(new PersonHandler() { 
+          PId = reader.GetInt64(0), 
+          Name = reader.GetString(1), 
+          Family = reader.GetString(2),
+          City = reader.GetString(3),
+          Street = reader.GetString(4),
+          StreetNumber = reader.GetString(5)
+        });
+      }
+      return list;
+    }
 
     public void EntryGetPhone(SQLiteConnection con, int id_person)
     {

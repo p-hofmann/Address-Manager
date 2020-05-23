@@ -13,30 +13,103 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CoreLib;
 
 namespace Address_Manager
 {
-
-  public class DataObject
-  {
-    public string Name { get; set; }
-    public string Family { get; set; }
-    public string City { get; set; }
-    public string Street { get; set; }
-    public string StreetNumber { get; set; }
-  }
 
   /// <summary>
   /// Interaktionslogik für MainWindow.xaml
   /// </summary>
   public partial class MainWindow : Window
+  {
+    SqlHandler _sqlHandler;
+    public MainWindow()
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-            var list = new ObservableCollection<DataObject>();
-            list.Add(new DataObject() { Name = "Name", Family = "Family", City = "City", Street = "Street", StreetNumber = "StreetNumber" });
-            this.DatGridNameList.ItemsSource = list;
+        InitializeComponent();
+      _sqlHandler = new SqlHandler(/*defaultDbLocation: location in config file*/);
+      _sqlHandler.DbInitialize();
+      //_sqlHandler.
     }
+
+    private void ButtonRefresh_Click(object sender, RoutedEventArgs e)
+    {
+      //throw new Exception(sender.ToString());
+      var listPeople = _sqlHandler.GetListPerson();
+      this.DatGridNameList.ItemsSource = listPeople;
     }
+
+    private void DatGridNameList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
+
+    private void DatGridNameList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+      if (DatGridNameList.SelectedIndex == -1)
+        return;
+      var dataPerson = (PersonHandler)this.DatGridNameList.SelectedItem;
+      this.TBPId.Text = dataPerson.PId.ToString();
+      this.TBName.Text = dataPerson.Name;
+      this.TBFamily.Text = dataPerson.Family;
+      this.TBPostalCode.Text = dataPerson.PostalCode;
+      this.TBCity.Text = dataPerson.City;
+      this.TBStreet.Text = dataPerson.Street;
+      this.TBSNumber.Text = dataPerson.StreetNumber;
+      this.TabControlMain.SelectedIndex = 1;
+    }
+
+    private void BCProfileAdd_Click(object sender, RoutedEventArgs e)
+    {
+      if (DatGridNameList.SelectedIndex == -1)
+        _sqlHandler.AddPerson(
+          nameFirst: this.TBName.Text,
+          nameLast: this.TBName.Text,
+          postalCode: this.TBPostalCode.Text,
+          cityName: this.TBName.Text,
+          streetName: this.TBName.Text,
+          houseNumber: this.TBName.Text
+          );
+      else
+        _sqlHandler.AddPerson(
+          nameFirst: "",
+          nameLast: "",
+          postalCode: "",
+          cityName: "",
+          streetName: "",
+          houseNumber: ""
+          );
+
+    }
+
+    private void BCProfileRemove_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void BCPhoneAdd_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void BCPhoneRemove_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void BCPictureAdd_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void BCPictureRemove_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void BCPictureSave_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+  }
 }

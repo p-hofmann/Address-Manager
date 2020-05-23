@@ -15,7 +15,7 @@ namespace UnitTestCore
     {
       try
       {
-        SqlManager db = new SqlManager(debug: true);
+        SqlHandler db = new SqlHandler(debug: true);
         db.DbInitialize();
       }
       catch (Exception ex)
@@ -29,7 +29,7 @@ namespace UnitTestCore
     {
       try
       {
-        SqlManager db = new SqlManager(debug: true);
+        SqlHandler db = new SqlHandler(debug: true);
         db.DbInitialize();
         db.DbDelete();
       }
@@ -44,7 +44,7 @@ namespace UnitTestCore
     {
       try
       {
-        SqlManager db = new SqlManager(debug: true);
+        SqlHandler db = new SqlHandler(debug: true);
         db.DbInitialize();
         //TODO: add some entries
         db.DbClear();
@@ -60,7 +60,7 @@ namespace UnitTestCore
     [TestMethod]
     public void TestMethodEntryAddPhone()
     {
-      SqlManager db = new SqlManager(debug: true);
+      SqlHandler db = new SqlHandler(debug: true);
       db.DbInitialize();
       db.AddPhone(0, "0", ""/*TODO*/);
       Assert.IsTrue(false);
@@ -69,7 +69,7 @@ namespace UnitTestCore
     [TestMethod]
     public void TestMethodEntryAddPicture()
     {
-      SqlManager db = new SqlManager(debug: true);
+      SqlHandler db = new SqlHandler(debug: true);
       db.DbInitialize();
       db.AddPicture(0, ""/*TODO*/);
       Assert.IsTrue(false);
@@ -78,7 +78,7 @@ namespace UnitTestCore
     [TestMethod]
     public void TestMethodEntryRemove()
     {
-      SqlManager db = new SqlManager(debug: true);
+      SqlHandler db = new SqlHandler(debug: true);
       db.DbInitialize();
       db.RemovePerson(0/*TODO*/);
       Assert.IsTrue(false);
@@ -87,7 +87,7 @@ namespace UnitTestCore
     [TestMethod]
     public void TestMethodEntryGetAll()
     {
-      SqlManager db = new SqlManager(debug: true);
+      SqlHandler db = new SqlHandler(debug: true);
       db.DbInitialize();
       db.EntryGetAll();
       Assert.IsTrue(false);
@@ -96,7 +96,7 @@ namespace UnitTestCore
     [TestMethod]
     public void TestMethodEntryModify()
     {
-      SqlManager db = new SqlManager(debug: true);
+      SqlHandler db = new SqlHandler(debug: true);
       db.DbInitialize();
       db.EntryModify();
       Assert.IsTrue(false);
